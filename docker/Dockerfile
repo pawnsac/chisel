@@ -8,11 +8,14 @@ RUN apt-get install -y libspdlog-dev nlohmann-json-dev
 RUN apt-get install -y libmlpack-dev
 RUN ln -s /usr/bin/clang-8 /usr/bin/clang && ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
 
-RUN git clone https://github.com/aspire-project/chisel
-RUN git clone https://github.com/aspire-project/chiselbench
+RUN git clone https://github.com/keffinel/chisel
+RUN git clone https://github.com/keffinel/chiselbench
+RUN git clone https://github.com/coreutils/coreutils
+RUN git clone https://github.com/coreutils/gnulib
 
 RUN mkdir -p chisel/build && cd chisel/build && CXX=clang cmake .. && make
 
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/chisel/build/bin
+ENV GNULIB_SRCDIR /gnulib
 ENV CC clang
 ENV CHISEL_BENCHMARK_HOME /chiselbench
