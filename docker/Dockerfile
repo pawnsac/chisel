@@ -9,7 +9,7 @@ RUN apt-get install -y libmlpack-dev
 RUN ln -s /usr/bin/clang-8 /usr/bin/clang && ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
 
 RUN git clone https://github.com/keffinel/chisel
-RUN git clone https://github.com/keffinel/chiselbench
+RUN git clone https://github.com/keffinel/chisel-bench
 RUN git clone https://github.com/coreutils/coreutils
 RUN git clone https://github.com/coreutils/gnulib
 
