@@ -14,6 +14,7 @@ RUN git clone https://github.com/coreutils/coreutils
 RUN git clone https://github.com/coreutils/gnulib
 
 RUN mkdir -p chisel/build && cd chisel/build && CXX=clang cmake .. && make
+RUN mv coreutils chisel-bench/benchmark
 
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/chisel/build/bin
 ENV GNULIB_SRCDIR /gnulib
