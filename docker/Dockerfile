@@ -6,7 +6,7 @@ RUN apt-add-repository "deb http://apt.llvm.org/buster/ llvm-toolchain-buster-8 
 RUN apt-get install -y clang-8 libclang-8-dev llvm-8-dev cmake git wget
 RUN apt-get install -y libspdlog-dev nlohmann-json-dev
 RUN apt-get install -y libmlpack-dev
-RUN apt-get install -y autoconf automake autopoint bison gettext gperf texinfo rsync
+RUN apt-get install -y autoconf automake autopoint bison gettext gperf texinfo rsync build-essential
 RUN ln -s /usr/bin/clang-8 /usr/bin/clang && ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
 
 RUN git clone https://github.com/keffinel/chisel
