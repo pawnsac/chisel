@@ -21,3 +21,4 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/chisel/bu
 ENV GNULIB_SRCDIR /gnulib
 ENV CC clang
 ENV CHISEL_BENCHMARK_HOME /chiselbench
+ENV FORCE_UNSAFE_CONFIGURE 1
