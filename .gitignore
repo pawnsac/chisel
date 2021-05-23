@@ -19,3 +19,5 @@ build/
 
 # vim plugin
 .ycm_extra_conf.py
+
+.vscode/
