@@ -21,6 +21,3 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/chisel/bu
 ENV GNULIB_SRCDIR /gnulib
 ENV CC clang
 ENV CHISEL_BENCHMARK_HOME /chiselbench
-
-RUN ./pdbench/examples/benchmark/coreutils/bootstrap
-RUN FORCE_UNSAFE_CONFIGURE=1 ./pdbench/examples/benchmark/coreutils/configure
