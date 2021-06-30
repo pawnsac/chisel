@@ -9,8 +9,8 @@ RUN apt-get install -y libmlpack-dev
 RUN apt-get install -y autoconf automake autopoint bison gettext gperf texinfo rsync build-essential
 RUN ln -s /usr/bin/clang-8 /usr/bin/clang && ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
 
-RUN git clone https://github.com/keffinel/chisel
-RUN git clone https://github.com/keffinel/chisel-bench
+RUN git clone https://github.com/pawnsac/chisel
+RUN git clone https://github.com/pawnsac/chisel-bench
 RUN git clone https://github.com/coreutils/gnulib
 
 RUN mkdir -p chisel/build && cd chisel/build && CXX=clang cmake .. && make
