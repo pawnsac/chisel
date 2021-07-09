@@ -2,7 +2,13 @@
 
 #include "SourceManager.h"
 
+#include "OptionManager.h"
+
+#include "Profiler.h"
+
 #include <queue>
+
+#include "llvm/Support/Program.h"
 
 #include "clang/Lex/Lexer.h"
 
@@ -41,4 +47,12 @@ void Transformation::removeSourceText(const clang::SourceLocation &B,
       Replacement += chr;
   }
   TheRewriter.ReplaceText(clang::SourceRange(B, E), Replacement);
+}
+
+bool Transformation::callOracle() {
+  Profiler::GetInstance()->beginOracle();
+  int Status = llvm::sys::ExecuteAndWait(OptionManager::OracleFile,
+                                         {OptionManager::OracleFile});
+  Profiler::GetInstance()->endOracle();
+  return (Status == 0);
 }
