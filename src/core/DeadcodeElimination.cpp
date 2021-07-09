@@ -233,6 +233,7 @@ void BlockElimination::removeBlock(clang::CompoundStmt *CS) {
   for (int i = 0; i < Reverts_RBrac.size(); i++)
     TheRewriter.ReplaceText(Ranges_RBrac[i], Reverts_RBrac[i]);
   }
+  TheRewriter.overwriteChangedFiles();
 }
 
 bool BlockEliminationVisitor::VisitFunctionDecl(clang::FunctionDecl *FD) {
