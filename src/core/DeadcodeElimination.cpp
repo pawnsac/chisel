@@ -20,10 +20,6 @@
 #include "OptionManager.h"
 #include "SourceManager.h"
 
-//===----------------------------------------------------------------------===//
-// DeadcodeElimination Implementation with oracle testing
-//===----------------------------------------------------------------------===//
-
 void DeadCodeElimination::Run() {
   DCEFrontend::Parse(OptionManager::InputFile, new ClangDeadcodeElimination());
   Frontend::Parse(OptionManager::InputFile, new BlockElimination());
@@ -94,27 +90,13 @@ bool ClangDeadcodeElimination::isConstant(clang::Stmt *S) {
 }
 
 void ClangDeadcodeElimination::removeUnusedElements() {
-  std::vector<clang::SourceRange> Ranges;
-  std::vector<llvm::StringRef> Reverts;
-  const clang::SourceManager &SM = Context->getSourceManager();
   for (auto Loc : UnusedLocations) {
-    clang::SourceRange Range_temp = getRemoveRange(Loc);
-    if (Range_temp.isInvalid())
+    clang::SourceRange Range = getRemoveRange(Loc);
+    if (Range.isInvalid())
       continue;
-    clang::SourceLocation Start = Range_temp.getBegin();
-    clang::SourceLocation End = Range_temp.getBegin();
-    clang::SourceRange Range(Start, End);
-    Ranges.emplace_back(Range);
-    llvm::StringRef Revert = SourceManager::GetSourceText(SM, Start, End);
-    Reverts.emplace_back(Revert);
-    removeSourceText(Start, End);
+    removeSourceText(Range.getBegin(), Range.getEnd());
   }
   TheRewriter.overwriteChangedFiles();
-  if (!callOracle()) {
-    for (int i = 0; i < Reverts.size(); i++)
-      TheRewriter.ReplaceText(Ranges[i], Reverts[i]);
-    TheRewriter.overwriteChangedFiles();
-  }
 }
 
 bool DeadcodeElementCollectionVisitor::VisitVarDecl(clang::VarDecl *VD) {
@@ -204,36 +186,8 @@ void BlockElimination::HandleTranslationUnit(clang::ASTContext &Ctx) {
 }
 
 void BlockElimination::removeBlock(clang::CompoundStmt *CS) {
-  std::vector<clang::SourceRange> Ranges_LBrac;
-  std::vector<llvm::StringRef> Reverts_LBrac;
-  std::vector<clang::SourceRange> Ranges_RBrac;
-  std::vector<llvm::StringRef> Reverts_RBrac;
-  const clang::SourceManager &SM = Context->getSourceManager();
-
-  clang::SourceLocation Start_LBrac =CS->getLBracLoc();
-  clang::SourceLocation End_LBrac =CS->getLBracLoc().getLocWithOffset(1);
-  clang::SourceRange Range_LBrac(Start_LBrac, End_LBrac);
-  Ranges_LBrac.emplace_back(Range_LBrac);
-  llvm::StringRef Revert_LBrac = SourceManager::GetSourceText(SM, Start_LBrac, End_LBrac);
-  Reverts_LBrac.emplace_back(Revert_LBrac);
-  removeSourceText(Start_LBrac, End_LBrac);
-
-  clang::SourceLocation Start_RBrac =CS->getRBracLoc();
-  clang::SourceLocation End_RBrac =CS->getRBracLoc().getLocWithOffset(1);
-  clang::SourceRange Range_RBrac(Start_RBrac, End_RBrac);
-  Ranges_RBrac.emplace_back(Range_RBrac);
-  llvm::StringRef Revert_RBrac = SourceManager::GetSourceText(SM, Start_RBrac, End_RBrac);
-  Reverts_RBrac.emplace_back(Revert_RBrac);
-  removeSourceText(Start_RBrac, End_RBrac);
-
-  TheRewriter.overwriteChangedFiles();
-  if (!callOracle()) {
-  for (int i = 0; i < Reverts_LBrac.size(); i++)
-    TheRewriter.ReplaceText(Ranges_LBrac[i], Reverts_LBrac[i]);
-  for (int i = 0; i < Reverts_RBrac.size(); i++)
-    TheRewriter.ReplaceText(Ranges_RBrac[i], Reverts_RBrac[i]);
-  }
-  TheRewriter.overwriteChangedFiles();
+  removeSourceText(CS->getLBracLoc(), CS->getLBracLoc().getLocWithOffset(1));
+  removeSourceText(CS->getRBracLoc(), CS->getRBracLoc().getLocWithOffset(1));
 }
 
 bool BlockEliminationVisitor::VisitFunctionDecl(clang::FunctionDecl *FD) {

@@ -16,7 +16,7 @@ protected:
   virtual void Initialize(clang::ASTContext &Ctx);
 
   std::vector<clang::Stmt *> getAllChildren(clang::Stmt *S);
-  bool callOracle();
+
   void removeSourceText(const clang::SourceLocation &B,
                         const clang::SourceLocation &E);
 
